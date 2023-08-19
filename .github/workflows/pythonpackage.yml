@@ -2,6 +2,9 @@ name: Python package
 
 on:
   push:
+  release:
+    types:
+    - published
 
 jobs:
   build-wheels:
@@ -24,3 +27,14 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         path: ./wheelhouse/*.whl
+
+  upload-pypi:
+    if: github.event_name == 'release' && github.event.action == 'published'
+    needs: [build-wheels]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifact
+        path: dist
+    - uses: pypa/gh-action-pypi-publish@release/v1

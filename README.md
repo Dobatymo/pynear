@@ -41,10 +41,10 @@ This library needs OpenMP support to be built and installed. The whole compilati
 
 # Pickle serialization
 
-Pyvptree is pickle serializable:
+vptree indices is pickle serializable:
 ```python
 import numpy as np
-import pyvptree
+import pynear
 
 np.random.seed(seed=42)
 
@@ -55,7 +55,7 @@ data = np.random.rand(num_points, dimension).astype(dtype=np.uint8)
 
 queries = np.random.rand(num_queries, dimension).astype(dtype=np.uint8)
 
-vptree = pyvptree.VPTreeBinaryIndex()
+vptree = pynear.VPTreeBinaryIndex()
 vptree.set(data)
 
 data = pickle.dumps(vptree)
@@ -75,7 +75,7 @@ The below benchmarks are for different values of K (1, 2, 4, 8, 16), comparing F
 
 Benchmarks are split into dimensionality ranges for better analysis.
 
-To customize or regenerate the benchmarks as well as to see benchmark results, see [benchmarks](./pyvptree/benchmark/README.md) session.
+To customize or regenerate the benchmarks as well as to see benchmark results, see [benchmarks](./pynear/benchmark/README.md) session.
 
 # Development
 
@@ -87,7 +87,7 @@ make test
 
 ## Debugging and Running C++ Code on Unix
 
-For debugging and running C++ code independently from python module, CMake config files are provided in pyvptree/CMakeLists.txt.
+For debugging and running C++ code independently from python module, CMake config files are provided in pynear/CMakeLists.txt.
 For building and running C++ tests run:
 
 ```
@@ -108,7 +108,7 @@ Install CMake (for example `py -m pip install cmake`) and pybind11 (`py -m pip i
 ```batch
 mkdir build
 cd build
-cmake ..\pyvptree
+cmake ..\pynear
 ```
 
 You may have to specify some arguments like the correct generator `-G "Visual Studio 15 2017 Win64"`
