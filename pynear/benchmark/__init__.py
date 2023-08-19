@@ -1,2 +1,2 @@
-from pyvptree.benchmark.benchmark import ComparatorBenchmark, ComparatorBenchmarkCase
-from pyvptree.benchmark.dataset import BenchmarkDataset
+from pynear.benchmark.benchmark import ComparatorBenchmark, ComparatorBenchmarkCase
+from pynear.benchmark.dataset import BenchmarkDataset

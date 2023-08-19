@@ -10,7 +10,7 @@ from typing import Callable, Tuple
 import numpy as np
 import pytest
 
-import pyvptree
+import pynear
 
 
 def hamming_distance_pairwise(a: np.ndarray, b: np.ndarray) -> np.ndarray:
@@ -79,9 +79,9 @@ def _num_dups(distances):
 
 
 CLASSES = [
-    (pyvptree.VPTreeL2Index, exhaustive_search_euclidean),
-    (pyvptree.VPTreeL1Index, exhaustive_search_manhattan),
-    (pyvptree.VPTreeChebyshevIndex, exhaustive_search_chebyshev),
+    (pynear.VPTreeL2Index, exhaustive_search_euclidean),
+    (pynear.VPTreeL1Index, exhaustive_search_manhattan),
+    (pynear.VPTreeChebyshevIndex, exhaustive_search_chebyshev),
 ]
 
 
@@ -99,7 +99,7 @@ def test_binary():
 
     exaustive_indices, exaustive_distances = exhaustive_search_hamming(data, queries, k)
 
-    vptree = pyvptree.VPTreeBinaryIndex()
+    vptree = pynear.VPTreeBinaryIndex()
     vptree.set(data)
     vptree_indices, vptree_distances = vptree.searchKNN(queries, k)
 
@@ -124,7 +124,7 @@ def test_large_binary():
 
     exaustive_indices, exaustive_distances = exhaustive_search_hamming(data, queries, k)
 
-    vptree = pyvptree.VPTreeBinaryIndex()
+    vptree = pynear.VPTreeBinaryIndex()
     vptree.set(data)
     vptree_indices, vptree_distances = vptree.searchKNN(queries, k)
 

@@ -6,8 +6,8 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.ticker import AutoMinorLocator
 
-from pyvptree.benchmark import BenchmarkDataset, ComparatorBenchmark, ComparatorBenchmarkCase
-from pyvptree.logging import create_and_configure_log
+from pynear.benchmark import BenchmarkDataset, ComparatorBenchmark, ComparatorBenchmarkCase
+from pynear.logging import create_and_configure_log
 
 logger = create_and_configure_log(__name__)
 

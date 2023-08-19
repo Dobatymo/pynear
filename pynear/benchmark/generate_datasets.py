@@ -4,8 +4,8 @@ import os
 import numpy as np
 from PIL import Image
 
-import pyvptree
-from pyvptree.benchmark.dataset import BenchmarkDataset
+import pynear
+from pynear.benchmark.dataset import BenchmarkDataset
 
 
 def main():

@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 
-import pyvptree
-from pyvptree.benchmark.dataset import BenchmarkDataset
-from pyvptree.logging import create_and_configure_log
+import pynear
+from pynear.benchmark.dataset import BenchmarkDataset
+from pynear.logging import create_and_configure_log
 
 logger = create_and_configure_log(__name__)
 
@@ -37,7 +37,7 @@ class ComparatorBenchmark:
 
     def __init__(self, benchmark_cases: List[ComparatorBenchmarkCase]):
         """
-        Build a benchmark comparator between pyvptree and faiss.
+        Build a benchmark comparator between pynear and faiss.
 
         Args:
             benchmark_cases (List[BenchmarkCase]): the list of benchmark cases to perform.
@@ -65,8 +65,8 @@ class ComparatorBenchmark:
 
             start = time.time()
             logger.info("generating pyvp index ... ")
-            pyvptree_index = self._generate_pyvptree_index(train, case.dataset._pyvpindex_type)
-            logger.info(f"done, pyvptree index took {time.time()-start:0.3f} seconds... ")
+            pynear_index = self._generate_pynear_index(train, case.dataset._pyvpindex_type)
+            logger.info(f"done, pynear index took {time.time()-start:0.3f} seconds... ")
             for k in case.ks:
                 logger.info("searching into faiss index ... ")
                 start = time.time()
@@ -75,12 +75,12 @@ class ComparatorBenchmark:
                 faiss_time = end - start
                 logger.info(f"faiss search for k = {k} took {faiss_time:0.3f} seconds... ")
 
-                logger.info("searching into pyvptree index ... ")
+                logger.info("searching into pynear index ... ")
                 start = time.time()
-                self._search_knn_pyvptree(pyvptree_index, test, k)
+                self._search_knn_pynear(pynear_index, test, k)
                 end = time.time()
-                pyvptree_time = end - start
-                logger.info(f"pyvptree search for k = {k} took {pyvptree_time:0.3f} seconds... ")
+                pynear_time = end - start
+                logger.info(f"pynear search for k = {k} took {pynear_time:0.3f} seconds... ")
 
                 results.append(
                     {
@@ -90,11 +90,11 @@ class ComparatorBenchmark:
                         "index_type": case.dataset.index_type().__name__,
                         "query_size": test.shape[0],
                         "faiss_time": faiss_time,
-                        "pyvptree_time": pyvptree_time,
+                        "pynear_time": pynear_time,
                     }
                 )
 
-                if case.dataset.index_type() == pyvptree.VPTreeL2Index:
+                if case.dataset.index_type() == pynear.VPTreeL2Index:
                     start = time.time()
                     logger.info("generating sklearn index ... ")
                     sklearn_index = self._generate_sklearn_index(train, k)
@@ -130,7 +130,7 @@ class ComparatorBenchmark:
     def _generate_faiss_index(self, features: np.ndarray, index_type: Any):
         d = features.shape[1]
         faiss_index = faiss.IndexFlatL2(d)
-        if index_type == pyvptree.VPTreeBinaryIndex:
+        if index_type == pynear.VPTreeBinaryIndex:
             d = features.shape[1] * 8
             quantizer = faiss.IndexBinaryFlat(d)
 
@@ -148,17 +148,17 @@ class ComparatorBenchmark:
         # only for L2 distances
         return NearestNeighbors(n_neighbors=k, algorithm="kd_tree").fit(features)
 
-    def _generate_pyvptree_index(self, features: np.ndarray, index_type: Any):
-        vptree_index = pyvptree.VPTreeL2Index()
-        if index_type == pyvptree.VPTreeBinaryIndex:
-            vptree_index = pyvptree.VPTreeBinaryIndex()
+    def _generate_pynear_index(self, features: np.ndarray, index_type: Any):
+        vptree_index = pynear.VPTreeL2Index()
+        if index_type == pynear.VPTreeBinaryIndex:
+            vptree_index = pynear.VPTreeBinaryIndex()
         vptree_index.set(features)
         return vptree_index
 
     def _search_knn_faiss(self, index, query_features, k=1):
         return index.search(query_features, k=k)
 
-    def _search_knn_pyvptree(self, index, query_features, k=1):
+    def _search_knn_pynear(self, index, query_features, k=1):
         return index.searchKNN(query_features, k)
 
     def _search_knn_sklearn(self, index, query_features):

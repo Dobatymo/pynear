@@ -12,8 +12,8 @@ import wget
 from img2vec_pytorch import Img2Vec
 from PIL import Image
 
-import pyvptree
-from pyvptree.logging import create_and_configure_log
+import pynear
+from pynear.logging import create_and_configure_log
 
 logger = create_and_configure_log(__name__)
 
@@ -24,7 +24,7 @@ class BenchmarkDataset:
         data: Union[np.ndarray, Callable[..., Any]],
         name: str,
         dim: int,
-        pyvpindex_type: Union[pyvptree.VPTreeL2Index, pyvptree.VPTreeBinaryIndex],
+        pyvpindex_type: Union[pynear.VPTreeL2Index, pynear.VPTreeBinaryIndex],
         description: str,
     ):
         """
@@ -36,11 +36,11 @@ class BenchmarkDataset:
            name (str): the name of this dataset.
            dim (int): the dimensionality of this dataset.
            description (str): a short description of what kind of data is within this dataset.
-           pyvpindex_type (pyvptree.VPTreeL2Index or pyvptree.VPTreeBinaryIndex):
-           the pyvptree index that will be used with to index this dataset.
+           pyvpindex_type (pynear.VPTreeL2Index or pynear.VPTreeBinaryIndex):
+           the pynear index that will be used with to index this dataset.
         """
         self._name: str = name
-        self._pyvpindex_type: Union[pyvptree.VPTreeL2Index, pyvptree.VPTreeBinaryIndex] = pyvpindex_type
+        self._pyvpindex_type: Union[pynear.VPTreeL2Index, pynear.VPTreeBinaryIndex] = pyvpindex_type
         self._description: str = description
         self._original_data: Optional[Union[np.ndarray, Callable[..., np.ndarray]]] = data
         self._loaded_data: Optional[np.ndarray] = None
@@ -115,7 +115,7 @@ class BenchmarkDataset:
                         dim=dim,
                     ),
                     dim=dim,
-                    pyvpindex_type=pyvptree.VPTreeL2Index,
+                    pyvpindex_type=pynear.VPTreeL2Index,
                 )
             )
 
